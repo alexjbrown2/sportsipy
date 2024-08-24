@@ -314,8 +314,8 @@ class Boxscore:
         """
         url = BOXSCORE_URL % uri
         try:
-            url_data = pq(url)
-        except HTTPError:
+            url_data = pq(url=url)
+        except (HTTPError, AttributeError):
             return None
         return pq(utils._remove_html_comment_tags(url_data))
 
@@ -344,6 +344,10 @@ class Boxscore:
         scheme = BOXSCORE_SCHEME[field]
         items = [i.text() for i in boxscore(scheme).items()]
         game_info = items[0].split('\n')
+        # In 2023, NBA In-Season Tournament text is before the actual game time if applicable,
+        # so if the text doesn't contain AM or PM, drop it
+        if 'AM' not in game_info[0] and 'PM' not in game_info[0]:
+            game_info.pop(0)
         if len(game_info) < 3 and field == 'location':
             return None
         return game_info[BOXSCORE_ELEMENT_INDEX[field]]
@@ -369,7 +373,8 @@ class Boxscore:
             The complete text for the requested tag.
         """
         scheme = BOXSCORE_SCHEME[field]
-        return boxscore(scheme)
+        items = [i for i in boxscore(scheme).items()]
+        return items[BOXSCORE_ELEMENT_INDEX[field]]
 
     def _parse_summary(self, boxscore):
         """
@@ -1644,7 +1649,7 @@ class Boxscores:
             A PyQuery object containing the HTML contents of the requested
             page.
         """
-        return pq(url)
+        return pq(url=url)
 
     def _get_boxscore_uri(self, url):
         """

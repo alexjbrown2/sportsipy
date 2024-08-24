@@ -145,7 +145,7 @@ class Player(AbstractPlayer):
         """
         url = PLAYER_URL % self._player_id
         try:
-            url_data = pq(url)
+            url_data = pq(url=url)
         except (HTTPError, ParserError):
             return None
         return pq(utils._remove_html_comment_tags(url_data))
@@ -695,7 +695,7 @@ class Roster:
             Returns a PyQuery object of the team's HTML page.
         """
         try:
-            return pq(url)
+            return pq(url=url)
         except HTTPError:
             return None
 
@@ -779,7 +779,7 @@ class Roster:
         string
             Returns a string of the coach's name.
         """
-        for line in page(PLAYER_SCHEME['summary']).find('p').items():
+        for line in page.find('p').items():
             strong = line.find('strong')
             if hasattr(strong, 'text') and strong.text().strip() == 'Coach:':
                 return line.find('a').text()

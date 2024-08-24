@@ -330,8 +330,8 @@ class Boxscore:
         """
         url = BOXSCORE_URL % uri
         try:
-            url_data = pq(url)
-        except HTTPError:
+            url_data = pq(url=url)
+        except (HTTPError, AttributeError):
             return None
         # For NFL, a 404 page doesn't actually raise a 404 error, so it needs
         # to be manually checked.
@@ -1558,7 +1558,7 @@ class Boxscores:
             A PyQuery object containing the HTML contents of the requested
             page.
         """
-        return pq(url)
+        return pq(url=url)
 
     def _get_boxscore_uri(self, url):
         """

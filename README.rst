@@ -1,18 +1,20 @@
 Sportsipy: A free sports API written for python
 ###############################################
-**Development Status: This project is no longer undergoing active development. Please consider
-opening a pull request for any new features or bug fixes to be reviewed and
-merged.**
-
-.. image:: https://github.com/roclark/sportsipy/workflows/Sportsipy%20push%20tests/badge.svg
-    :target: https://github.com/roclark/sportsipy/actions
-.. image:: https://readthedocs.org/projects/sportsipy/badge/?version=latest
-    :target: https://sportsipy.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
-.. image:: https://img.shields.io/pypi/v/sportsipy.svg
-    :target: https://pypi.org/project/sportsipy
 
 .. contents::
+
+Development Status
+==================
+
+Started in early 2023, this project is an active fork of
+`roclark/sportsipy <https://github.com/roclark/sportsipy/>`_, fixing basic
+issues related to site layout changes, python dependencies, and
+failing test cases.  Note that not all existing functions work due
+to changes on the source site, but fixes will be integrated as they are
+identified.
+
+Background
+==========
 
 Sportsipy is a free python API that pulls the stats from
 www.sports-reference.com and allows them to be easily be used in python-based
@@ -30,23 +32,15 @@ picture of how a team has performed during a game or throughout a season.
 Installation
 ============
 
-The easiest way to install `sportsipy` is by downloading the latest
-released binary from PyPI using PIP. For instructions on installing PIP, visit
-`PyPA.io <https://pip.pypa.io/en/stable/installing/>`_ for detailed steps on
-installing the package manager for your local environment.
+**Important**: This fork is not the reference on PyPI.  To include this fork
+in your requirements::
 
-Next, run::
+    pip install git+https://github.com/davidjkrause/sportsipy@master
 
-    pip install sportsipy
-
-to download and install the latest official release of `sportsipy` on
-your machine. You now have the latest stable version of `sportsipy`
-installed and can begin using it following the examples below!
-
-If the bleeding-edge version of `sportsipy` is desired, clone this
+If the bleeding-edge source version of `sportsipy` is desired, clone this
 repository using git and install all of the package requirements with PIP::
 
-    git clone https://github.com/roclark/sportsipy
+    git clone https://github.com/davidjkrause/sportsipy
     cd sportsipy
     pip install -r requirements.txt
 

@@ -8,7 +8,7 @@ def read_file(filename):
     return open('%s' % filepath, 'r', encoding='utf8').read()
 
 
-def mock_pyquery(url):
+def mock_pyquery(url, timeout=None):
     class MockPQ:
         def __init__(self, html_contents):
             self.status_code = 200
@@ -23,30 +23,31 @@ class TestFBTeam:
     def setup_method(self):
         self.results = {
             'name': 'Tottenham Hotspur',
+            'short_name': 'Tottenham',
             'season': '2019-2020',
-            'record': '11-8-10',
-            'points': 41,
-            'position': 8,
+            'record': '16-11-11',
+            'points': 59,
+            'position': 6,
             'league': 'Premier League',
-            'home_record': '8-2-4',
-            'home_wins': 8,
-            'home_draws': 2,
+            'home_record': '12-3-4',
+            'home_wins': 12,
+            'home_draws': 3,
             'home_losses': 4,
-            'home_games': 14,
-            'home_points': 26,
-            'away_record': '3-6-6',
-            'away_wins': 3,
-            'away_draws': 6,
-            'away_losses': 6,
-            'away_games': 15,
-            'away_points': 15,
-            'goals_scored': 47,
-            'goals_against': 40,
-            'goal_difference': 7,
-            'expected_goals': 38.5,
-            'expected_goals_against': 42.7,
-            'expected_goal_difference': -4.2,
-            'manager': 'José Mourinho',
+            'home_games': 19,
+            'home_points': 39,
+            'away_record': '4-8-7',
+            'away_wins': 4,
+            'away_draws': 8,
+            'away_losses': 7,
+            'away_games': 19,
+            'away_points': 20,
+            'goals_scored': 61,
+            'goals_against': 47,
+            'goal_difference': 14,
+            'expected_goals': 47.9,
+            'expected_goals_against': 54.2,
+            'expected_goal_difference': -6.3,
+            'manager': None,
             'country': 'England',
             'gender': 'Male'
         }

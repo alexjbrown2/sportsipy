@@ -20,7 +20,7 @@ def read_file(filename):
     return open('%s' % filepath, 'r', encoding='utf8').read()
 
 
-def mock_pyquery(url):
+def mock_pyquery(url, timeout=None):
     class MockPQ:
         def __init__(self, html_contents):
             self.status_code = 200
@@ -90,8 +90,8 @@ class TestNBABoxscore:
             'away_turnover_percentage': 9.2,
             'away_offensive_rating': 116.3,
             'away_defensive_rating': 106.6,
-            'home_wins': 0,
-            'home_losses': 0,
+            'home_wins': 36,
+            'home_losses': 20,
             'home_minutes_played': 240,
             'home_field_goals': 42,
             'home_field_goal_attempts': 90,
@@ -181,9 +181,7 @@ class TestNBABoxscore:
         expected = ('Boxscore for Houston Rockets at Utah Jazz '
                     '(9:00 PM, February 22, 2020)')
 
-        boxscore = Boxscore(BOXSCORE)
-
-        assert boxscore.__repr__() == expected
+        assert self.boxscore.__repr__() == expected
 
     def test_nba_boxscore_home_win_and_losses(self):
         self.boxscore._home_record = '36-20'

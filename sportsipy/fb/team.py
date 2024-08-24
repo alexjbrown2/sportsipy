@@ -38,6 +38,7 @@ class Team:
     def __init__(self, team_id, squad_page=None):
         self._squad_id = None
         self._name = None
+        self._short_name = None
         self._season = None
         self._record = None
         self._position = None
@@ -92,19 +93,32 @@ class Team:
         doc : PyQuery object
             A PyQuery object of the squad's entire HTML page.
         """
-        name = doc('h1[itemprop="name"]')
+        name = doc('div[data-template="Partials/Teams/Summary"]')
+        name = name('h1')
         name = name('span').text()
         # Name is in format "YYYY-YYYY Team Name Stats"
         # or "YYYY Team Name Stats"
-        # ie. "2019-2020 Tottenham Hotspur Stats"
+        # ie. "2019-2020 Tottenham Hotspur Stats (Premier League)"
         # or "2020 Sporting KC Stats"
         # The season will always be the first part of the string.
-        season = name.split(' ')[0]
-        # The team's name will always be between the season and the string
-        # "Stats", and therefore only those pieces should be pulled.
-        name = ' '.join(name.split(' ')[1:-1])
+        match = re.findall('^.* Stats\s*', name)
+        if len(match) == 1:
+            match = match[0].strip().split(' ')
+            season = match[0]
+            name = ' '.join(match[1:-1])
+        else:
+            season = None
+        
+        # Short name used in some other places can be obtained from standings table at bottom
+        short_name = doc('tr.hilite.bold')
+        if len(short_name) > 0:
+            short_name = short_name.eq(0)('td[data-stat="team"]').text()
+        else:
+            short_name = name
+
         self._season = season
         self._name = name
+        self._short_name = short_name
 
     def _location_records(self, record_line):
         """
@@ -131,15 +145,14 @@ class Team:
         home_points, away_points = None, None
         records = record_line.lower().replace('home record: ', '')
         records = records.replace('away record: ', '')
-        match_records = re.findall(r'\(.*?\)', records)
+        match_records = re.findall(r'\d+-\d+-\d+', records)
         p = re.compile(r'[\(\)]')
         if len(match_records) == 2:
-            home_record, away_record = [p.sub(' ', x).strip()
-                                        for x in match_records]
-        points = re.sub(r'\(.*?\)', '', records)
-        points = re.findall(r'\d+', points)
+            home_record = match_records[0]
+            away_record = match_records[1]
+        points = re.findall(r'\d+ points', records)
         if len(points) == 2:
-            home_points, away_points = [int(p) for p in points]
+            home_points, away_points = [int(p.replace(' points', '')) for p in points]
         return home_record, away_record, home_points, away_points
 
     def _records(self, record_line):
@@ -330,6 +343,14 @@ class Team:
         Hotspur'.
         """
         return self._name
+
+    @property
+    def short_name(self):
+        """
+        Returns a ``string`` of the team's short name, such as 'Tottenham',
+        used in schedule and standings tables
+        """
+        return self._short_name
 
     @property
     def schedule(self):
